@@ -7,7 +7,6 @@ async function loadStatus() {
 
         render(data);
 
-        // ONLY set this once per successful load
         document.getElementById("lastUpdated").textContent =
             "Last updated: " + new Date().toLocaleString();
 
@@ -20,7 +19,7 @@ function render(data) {
     const container = document.getElementById("serverList");
     container.innerHTML = "";
 
-    const now = new Date(); // snapshot ONLY
+    const now = new Date(); // snapshot only during render
 
     data.forEach(server => {
         const since = new Date(server.since);
@@ -65,5 +64,8 @@ function formatDuration(ms) {
     return `${minutes}m`;
 }
 
-// initial load only
+// initial load
 loadStatus();
+
+// refresh FULL PAGE DATA every 60 seconds
+setInterval(loadStatus, 60000);
