@@ -1,23 +1,29 @@
 const DATA_URL = "state-public.json";
 
+let servers = [];
+let lastSuccessfulLoad = null;
+
 async function loadStatus() {
     try {
-        const res = await fetch(DATA_URL + "?t=" + new Date().getTime());
+        const res = await fetch(DATA_URL + "?t=" + Date.now());
         const data = await res.json();
 
-        render(data);
+        servers = data;
+        lastSuccessfulLoad = new Date();
+
+        render();
     } catch (err) {
-        console.error("Failed to load status.json", err);
+        console.error("Failed to load state-public.json", err);
     }
 }
 
-function render(data) {
+function render() {
     const container = document.getElementById("serverList");
     container.innerHTML = "";
 
     const now = new Date();
 
-    data.forEach(server => {
+    servers.forEach(server => {
         const since = new Date(server.since);
         const diffMs = now - since;
 
@@ -26,7 +32,9 @@ function render(data) {
         const card = document.createElement("div");
         card.classList.add("card");
 
-        const isOnline = server.status.toUpperCase() === "UP" || server.status.toUpperCase() === "ONLINE";
+        const isOnline =
+            server.status.toUpperCase() === "UP" ||
+            server.status.toUpperCase() === "ONLINE";
 
         card.classList.add(isOnline ? "online" : "offline");
 
@@ -36,16 +44,32 @@ function render(data) {
                 ${isOnline ? "ONLINE" : "OFFLINE"}
             </div>
             <div class="uptime">
-                ${isOnline ? "Running for" : "Down for"}: ${uptime}
+                ${isOnline ? "Running for" : "Down for"}:
+                <span class="uptime-counter" data-since="${server.since}">
+                    ${uptime}
+                </span>
             </div>
         `;
 
         container.appendChild(card);
     });
 
-    const lastUpdated = new Date().toLocaleString();
-    document.getElementById("lastUpdated").textContent =
-        "Last updated: " + lastUpdated;
+    if (lastSuccessfulLoad) {
+        document.getElementById("lastUpdated").textContent =
+            "Last updated: " + lastSuccessfulLoad.toLocaleString();
+    } else {
+        document.getElementById("lastUpdated").textContent =
+            "Last updated: --";
+    }
+}
+
+function updateUptimes() {
+    const now = new Date();
+
+    document.querySelectorAll(".uptime-counter").forEach(el => {
+        const since = new Date(el.dataset.since);
+        el.textContent = formatDuration(now - since);
+    });
 }
 
 function formatDuration(ms) {
@@ -56,23 +80,24 @@ function formatDuration(ms) {
 
     const h = hours % 24;
     const m = minutes % 60;
+    const s = seconds % 60;
 
     if (days > 0) {
         return `${days}d ${h}h ${m}m`;
     }
+
     if (hours > 0) {
-        return `${hours}h ${m}m`;
+        return `${hours}h ${m}m ${s}s`;
     }
-    return `${minutes}m`;
+
+    return `${minutes}m ${s}s`;
 }
 
-// initial load
+// Initial load
 loadStatus();
 
-// refresh every 60 seconds
+// Refresh data from GitHub every 60 seconds
 setInterval(loadStatus, 60000);
 
-// live uptime tick (updates numbers every second without refetch)
-setInterval(() => {
-    loadStatus();
-}, 1000);
+// Update only the timers every second
+setInterval(updateUptimes, 1000);
