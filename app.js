@@ -1,15 +1,16 @@
 const DATA_URL = "state-public.json";
 
-let lastSuccessfulLoad = null;
-
 async function loadStatus() {
     try {
         const res = await fetch(DATA_URL + "?t=" + Date.now());
         const data = await res.json();
 
-        lastSuccessfulLoad = new Date();
-
         render(data);
+
+        // ONLY set this once per successful load
+        document.getElementById("lastUpdated").textContent =
+            "Last updated: " + new Date().toLocaleString();
+
     } catch (err) {
         console.error("Failed to load state-public.json", err);
     }
@@ -19,7 +20,7 @@ function render(data) {
     const container = document.getElementById("serverList");
     container.innerHTML = "";
 
-    const now = new Date();
+    const now = new Date(); // snapshot ONLY
 
     data.forEach(server => {
         const since = new Date(server.since);
@@ -48,9 +49,6 @@ function render(data) {
 
         container.appendChild(card);
     });
-
-    document.getElementById("lastUpdated").textContent =
-        "Last updated: " + (lastSuccessfulLoad ? lastSuccessfulLoad.toLocaleString() : "--");
 }
 
 function formatDuration(ms) {
@@ -62,17 +60,10 @@ function formatDuration(ms) {
     const h = hours % 24;
     const m = minutes % 60;
 
-    if (days > 0) {
-        return `${days}d ${h}h ${m}m`;
-    }
-    if (hours > 0) {
-        return `${hours}h ${m}m`;
-    }
+    if (days > 0) return `${days}d ${h}h ${m}m`;
+    if (hours > 0) return `${hours}h ${m}m`;
     return `${minutes}m`;
 }
 
-// initial load
+// initial load only
 loadStatus();
-
-// refresh ONLY when JSON is updated on GitHub
-setInterval(loadStatus, 60000);
