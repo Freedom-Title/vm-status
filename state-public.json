@@ -1,0 +1,17 @@
+[
+    {
+        "name":  "Remote Server",
+        "status":  "UP",
+        "since":  "2026-07-06T14:04:22.1567935-05:00"
+    },
+    {
+        "name":  "Hyper-V Host",
+        "status":  "UP",
+        "since":  "2026-07-06T14:04:23.1403818-05:00"
+    },
+    {
+        "name":  "Domain Contr",
+        "status":  "UP",
+        "since":  "2026-07-06T14:04:23.6272472-05:00"
+    }
+]
