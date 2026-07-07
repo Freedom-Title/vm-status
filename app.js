@@ -1,4 +1,5 @@
 const DATA_URL = "state-public.json";
+const HEARTBEAT_URL = "heartbeat-public.json";
 
 async function loadStatus() {
     try {
@@ -12,6 +13,44 @@ async function loadStatus() {
 
     } catch (err) {
         console.error("Failed to load state-public.json", err);
+    }
+}
+async function loadHeartbeat() {
+    try {
+        const res = await fetch(HEARTBEAT_URL + "?t=" + new Date().getTime());
+        const data = await res.json();
+
+        const heartbeatTime = new Date(data.heartbeat);
+        const now = new Date();
+
+        const ageSeconds = Math.floor((now - heartbeatTime) / 1000);
+
+        const element = document.getElementById("heartbeatStatus");
+
+        if (ageSeconds < 30) {
+            element.innerHTML =
+                `🟢 Monitoring Active<br>
+                 Last heartbeat: ${heartbeatTime.toLocaleTimeString()}<br>
+                 Data age: ${ageSeconds} seconds`;
+        }
+        else if (ageSeconds < 120) {
+            element.innerHTML =
+                `🟡 Monitoring Delayed<br>
+                 Last heartbeat: ${heartbeatTime.toLocaleTimeString()}<br>
+                 Data age: ${ageSeconds} seconds`;
+        }
+        else {
+            element.innerHTML =
+                `🔴 Monitoring Offline<br>
+                 Last heartbeat: ${heartbeatTime.toLocaleTimeString()}<br>
+                 Data age: ${ageSeconds} seconds`;
+        }
+
+    } catch (err) {
+        console.error("Failed to load heartbeat status", err);
+
+        document.getElementById("heartbeatStatus").innerHTML =
+            "🔴 Unable to verify monitoring status";
     }
 }
 
@@ -66,6 +105,8 @@ function formatDuration(ms) {
 
 // initial load
 loadStatus();
+loadHeartbeat();
 
 // refresh FULL PAGE DATA every 15 seconds
 setInterval(loadStatus, 15000);
+setInterval(loadHeartbeat, 15000);
