@@ -1,3 +1,4 @@
+//delcare json files for status
 const DATA_URL = "state-public.json";
 const HEARTBEAT_URL = "heartbeat-public.json";
 
