@@ -67,5 +67,5 @@ function formatDuration(ms) {
 // initial load
 loadStatus();
 
-// refresh FULL PAGE DATA every 60 seconds
-setInterval(loadStatus, 60000);
+// refresh FULL PAGE DATA every 15 seconds
+setInterval(loadStatus, 15000);
