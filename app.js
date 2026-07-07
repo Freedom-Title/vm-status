@@ -29,18 +29,24 @@ async function loadHeartbeat() {
         const element = document.getElementById("heartbeatStatus");
 
         if (ageSeconds < 30) {
+
+            element.className = "heartbeat-status healthy";
             element.innerHTML =
                 `🟢 Monitoring Active<br>
                  Last heartbeat: ${heartbeatTime.toLocaleTimeString()}<br>
                  Data age: ${ageSeconds} seconds`;
         }
         else if (ageSeconds < 120) {
+
+            element.className = "heartbeat-status warning";
             element.innerHTML =
                 `🟡 Monitoring Delayed<br>
                  Last heartbeat: ${heartbeatTime.toLocaleTimeString()}<br>
                  Data age: ${ageSeconds} seconds`;
         }
         else {
+
+            element.className = "heartbeat-status danger";
             element.innerHTML =
                 `🔴 Monitoring Offline<br>
                  Last heartbeat: ${heartbeatTime.toLocaleTimeString()}<br>
