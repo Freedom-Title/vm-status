@@ -82,14 +82,26 @@ body {
 /* Monitoring heartbeat status */
 
 .heartbeat-status {
-    margin: 20px auto;
-    padding: 15px;
-    max-width: 600px;
-    text-align: center;
+    margin: 15px auto;
+    padding: 12px;
     border-radius: 10px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    background: #f4f4f4;
+    background: #1e293b;
+    color: #e5e7eb;
+    font-size: 14px;
+    font-weight: bold;
+    border-left: 6px solid #64748b;
+}
+
+.heartbeat-status.healthy {
+    border-left-color: #22c55e;
+}
+
+.heartbeat-status.warning {
+    border-left-color: #f9a825;
+}
+
+.heartbeat-status.danger {
+    border-left-color: #ef4444;
 }
 
 .footer {
