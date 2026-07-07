@@ -28,7 +28,7 @@ async function loadHeartbeat() {
 
         const element = document.getElementById("heartbeatStatus");
 
-        if (ageSeconds < 30) {
+        if (ageSeconds < 180) {
 
             element.className = "heartbeat-status healthy";
             element.innerHTML =
@@ -36,7 +36,7 @@ async function loadHeartbeat() {
                  Last heartbeat: ${heartbeatTime.toLocaleTimeString()}<br>
                  Data age: ${ageSeconds} seconds`;
         }
-        else if (ageSeconds < 120) {
+        else if (ageSeconds < 500) {
 
             element.className = "heartbeat-status warning";
             element.innerHTML =
