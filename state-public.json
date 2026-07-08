@@ -1,8 +1,8 @@
 ﻿[
     {
         "name":  "Remote Server",
-        "status":  "UP",
-        "since":  "2026-07-06T20:17:14.7039142-05:00"
+        "status":  "DOWN",
+        "since":  "2026-07-07T22:28:53.4946976-05:00"
     },
     {
         "name":  "Hyper-V Host",
