@@ -1,8 +1,8 @@
 ﻿[
     {
         "name":  "Remote Server",
-        "status":  "UP",
-        "since":  "2026-07-10T21:32:32.4580309-05:00"
+        "status":  "DOWN",
+        "since":  "2026-07-10T21:43:31.3572560-05:00"
     },
     {
         "name":  "Domain Controller",
